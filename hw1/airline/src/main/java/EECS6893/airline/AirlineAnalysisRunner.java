@@ -35,9 +35,9 @@ public class AirlineAnalysisRunner extends Configured implements Tool {
 		job.setNumReduceTasks(1);	
 	
 		job.setMapOutputKeyClass(IntWritable.class);				
-		job.setMapOutputValueClass(IntWritable.class);					
-		job.setOutputKeyClass(IntWritable.class);					
-		job.setOutputValueClass(IntWritable.class);				
+		job.setMapOutputValueClass(Text.class);					
+		job.setOutputKeyClass(Text.class);					
+		job.setOutputValueClass(Text.class);				
 					
 		return job.waitForCompletion(true) ? 0 : -1;
 		
