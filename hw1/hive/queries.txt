@@ -1,0 +1,193 @@
+-----------------
+1. Create table
+-----------------
+hive> CREATE TABLE IF NOT EXISTS dota2.PlayerRatings (account_id BIGINT, total_matches INT, total_wins INT, trueskill_mu FLOAT, trueskill_sigma FLOAT) 
+    > COMMENT 'Player Ratings' ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+        > LOCATION '/user/mingyuan/test';
+        OK
+        Time taken: 0.131 seconds
+
+-----------------
+2. Select rows 
+-----------------
+hive> Select * FROM PlayerRatings WHERE total_matches > 100 limit 5;
+
+OK
+37018   137    262    25.410934    2.001894
+1589    109    229    26.938852    2.0036588
+4880    119    238    25.396338    2.1643844
+168114  127    221    26.771683    2.2445276
+19609   139    251    30.792833    1.6721019
+Time taken: 2.552 seconds, Fetched: 5 row(s)
+
+----------------
+3. Count rows 
+----------------
+
+hive> SELECT COUNT(*) FROM PlayerRatings WHERE total_matches > 100; 
+
+WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+Query ID = mingyuan_20170925103105_7a1fbbf1-7e3b-479b-a397-a890cc1cf053
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+ set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+ set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+ set mapreduce.job.reduces=<number>
+Starting Job = job_1506276692849_0002, Tracking URL = http://md-BigData:8088/proxy/application_1506276692849_0002/
+Kill Command = /usr/local/hadoop-2.8.1/bin/hadoop job  -kill job_1506276692849_0002
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2017-09-25 10:31:36,426 Stage-1 map = 0%,  reduce = 0%
+2017-09-25 10:32:10,687 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 11.45 sec
+2017-09-25 10:32:35,563 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 19.82 sec
+MapReduce Total cumulative CPU time: 19 seconds 820 msec
+Ended Job = job_1506276692849_0002
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 19.82 sec   HDFS Read: 41903928 HDFS Write: 103 SUCCESS
+Total MapReduce CPU Time Spent: 19 seconds 820 msec
+OK
+682
+Time taken: 92.607 seconds, Fetched: 1 row(s)
+
+------------------
+4. 
+------------------
+hive> SELECT * FROM PlayerRatings WHERE total_matches > 100 AND trueskill_mu > 35 ORDER BY trueskill_mu DESC;
+
+
+WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+Query ID = mingyuan_20170925103658_d58c33a2-a3d7-48ff-bf96-7d74495d5a57
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+ set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+ set mapreduce.job.reduces=<number>
+Starting Job = job_1506276692849_0003, Tracking URL = http://md-BigData:8088/proxy/application_1506276692849_0003/
+Kill Command = /usr/local/hadoop-2.8.1/bin/hadoop job  -kill job_1506276692849_0003
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2017-09-25 10:37:34,972 Stage-1 map = 0%,  reduce = 0%
+2017-09-25 10:37:41,664 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 3.22 sec
+2017-09-25 10:37:48,160 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 4.7 sec
+MapReduce Total cumulative CPU time: 4 seconds 700 msec
+Ended Job = job_1506276692849_0003
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 4.7 sec   HDFS Read: 41904366 HDFS Write: 273 SUCCESS
+Total MapReduce CPU Time Spent: 4 seconds 700 msec
+OK
+19042       121     180     41.005955   1.9438242
+1409        102     145     37.70351    2.3888664
+-279718288  111     145     36.831314   2.8243928
+32006       116     158     35.152496   2.447601
+Time taken: 51.361 seconds, Fetched: 4 row(s)
+
+------------------------
+5. Group with counting
+------------------------
+    Round by 10:
+
+        hive> SELECT ROUND(total_matches, -1), COUNT(*) FROM PlayerRatings GROUP BY ROUND(total_matches, -1);
+
+
+
+        WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+        Query ID = mingyuan_20170925104504_5d27f2ca-bdff-4afc-a843-601bdaaa717c
+        Total jobs = 1
+        Launching Job 1 out of 1
+        Number of reduce tasks not specified. Estimated from input data size: 1
+        In order to change the average load for a reducer (in bytes):
+         set hive.exec.reducers.bytes.per.reducer=<number>
+        In order to limit the maximum number of reducers:
+         set hive.exec.reducers.max=<number>
+        In order to set a constant number of reducers:
+         set mapreduce.job.reduces=<number>
+        Starting Job = job_1506276692849_0008, Tracking URL = http://md-BigData:8088/proxy/application_1506276692849_0008/
+        Kill Command = /usr/local/hadoop-2.8.1/bin/hadoop job  -kill job_1506276692849_0008
+        Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+        2017-09-25 10:45:09,660 Stage-1 map = 0%,  reduce = 0%
+        2017-09-25 10:45:15,990 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 2.75 sec
+        2017-09-25 10:45:22,295 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 4.07 sec
+        MapReduce Total cumulative CPU time: 4 seconds 70 msec
+        Ended Job = job_1506276692849_0008
+        MapReduce Jobs Launched: 
+        Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 4.07 sec   HDFS Read: 41903461 HDFS Write: 738 SUCCESS
+        Total MapReduce CPU Time Spent: 4 seconds 70 msec
+        OK
+        NULL1
+        0       9677338
+        10      115818
+        20      22687
+        30      8393
+        40      3992
+        50      2229
+        60      1264
+        70      802
+        80      512
+        90      345
+        100     246
+        110     168
+        120     109
+        130     75
+        140     61
+        150     45
+        160     35
+        170     28
+        180     11
+        190     18
+        200     12
+        210     10
+        220     3
+        230     5
+        240     7
+        250     3
+        260     2 
+        270     3
+        290     1
+        300     1
+        340     1
+        400     1
+        1608400 1
+        Time taken: 18.618 seconds, Fetched: 34 row(s)
+
+
+------------------------
+6. Maximum trueskill_mu 
+------------------------
+
+hive> SELECT MAX(trueskill_mu) AS label FROM PlayerRatings;
+
+
+WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+Query ID = mingyuan_20170925105042_e6231bf1-dcc5-4a25-b113-ac225fed7798
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+ set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+ set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+ set mapreduce.job.reduces=<number>
+Starting Job = job_1506276692849_0009, Tracking URL = http://md-BigData:8088/proxy/application_1506276692849_0009/
+Kill Command = /usr/local/hadoop-2.8.1/bin/hadoop job  -kill job_1506276692849_0009
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2017-09-25 10:50:46,933 Stage-1 map = 0%,  reduce = 0%
+2017-09-25 10:50:53,234 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 3.05 sec
+2017-09-25 10:50:58,525 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 4.14 sec
+MapReduce Total cumulative CPU time: 4 seconds 140 msec
+Ended Job = job_1506276692849_0009
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 4.14 sec   HDFS Read: 41903199 HDFS Write: 109 SUCCESS
+Total MapReduce CPU Time Spent: 4 seconds 140 msec
+OK
+48.825893
+Time taken: 18.539 seconds, Fetched: 1 row(s)
+
+
+
