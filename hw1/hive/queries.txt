@@ -3,9 +3,9 @@
 -----------------
 hive> CREATE TABLE IF NOT EXISTS dota2.PlayerRatings (account_id BIGINT, total_matches INT, total_wins INT, trueskill_mu FLOAT, trueskill_sigma FLOAT) 
     > COMMENT 'Player Ratings' ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
-        > LOCATION '/user/mingyuan/test';
-        OK
-        Time taken: 0.131 seconds
+    > LOCATION '/user/mingyuan/test';
+OK
+Time taken: 0.131 seconds
 
 -----------------
 2. Select rows 
@@ -120,7 +120,7 @@ Time taken: 51.361 seconds, Fetched: 4 row(s)
         Total MapReduce CPU Time Spent: 4 seconds 70 msec
         OK
         NULL1
-        0       9677338
+        0       677338
         10      115818
         20      22687
         30      8393
