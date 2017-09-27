@@ -119,7 +119,6 @@ Time taken: 51.361 seconds, Fetched: 4 row(s)
         Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 4.07 sec   HDFS Read: 41903461 HDFS Write: 738 SUCCESS
         Total MapReduce CPU Time Spent: 4 seconds 70 msec
         OK
-        NULL1
         0       677338
         10      115818
         20      22687
