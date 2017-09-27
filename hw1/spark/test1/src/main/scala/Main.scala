@@ -14,13 +14,17 @@ object Main {
 
     // Load the text into a Spark RDD, which is a distributed representation of each line of text
     val textFile = sc.textFile("hdfs://localhost:9000/user/mingyuan/input/airline/2008.csv")
+    val splitRDD = textFile.map(line => line.split(","))
+
+    //myRDD.foreach( )
 
     //word count
-    val counts = textFile.map(line => (line.split(",")(1), 1))
+    val counts = splitRDD.filter(array => array(21) == "1")
+      .map(array => (array(1), 1))
       .reduceByKey(_ + _)
 
     counts.foreach(println)
     //System.out.println("" + counts.count());
-    counts.saveAsTextFile("/home/mingyuan/airline2");
+    counts.saveAsTextFile("/home/mingyuan/airline3");
   }
 }
