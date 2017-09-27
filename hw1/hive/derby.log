@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Mon Sep 25 10:25:08 EDT 2017:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-015e-b96d-658a-00000655c048 
+Tue Sep 26 19:57:17 EDT 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-015e-c09f-9587-000005eb2fb8 
 on database directory /home/mingyuan/EECS6893/hw1/hive/metastore_db with class loader sun.misc.Launcher$AppClassLoader@2812cbfa 
 Loaded from file:/home/mingyuan/Downloads/apache-hive-2.2.0-bin/lib/derby-10.10.2.0.jar
 java.vendor=Oracle Corporation
