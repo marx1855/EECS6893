@@ -1,0 +1,3 @@
+Maven Hadoop project example.
+Data source:  
+  http://stat-computing.org/dataexpo/2009/2008.csv.bz2
