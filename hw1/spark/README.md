@@ -16,4 +16,10 @@ ML:
 
 Working with Key/Value Pairs:
   https://www.safaribooksonline.com/library/view/learning-spark/9781449359034/ch04.html
-  
+
+
+Spark decision tree example:
+    https://docs.databricks.com/spark/latest/mllib/decision-trees.html
+
+Airline Dataset ML example:
+    https://mapr.com/blog/apache-spark-machine-learning-tutorial/
