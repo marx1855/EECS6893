@@ -1,4 +1,3 @@
-
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
@@ -7,13 +6,7 @@ import org.apache.spark.mllib.tree.DecisionTree
 
 object Main {
   def main(args: Array[String]) {
-    /*
-  val conf = new SparkConf()
-  conf.setMaster("local")
-  conf.set("spark.default.parallelism", "1")
-  conf.setAppName("Airline Cancellation")
-  val sc = new SparkContext(conf)
-  */
+
     val conf = new SparkConf()
     conf.setMaster("local")
     conf.set("spark.default.parallelism", "1")
@@ -112,7 +105,6 @@ object Main {
 
     }
 
-    //labelAndPreds.collect().take().foreach(println)
     val res = labelAndPreds.map(x => ((x._1, x._1.equals(x._2)), 1))
       .reduceByKey(_ + _)
 
