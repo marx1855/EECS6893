@@ -7,6 +7,7 @@ import org.apache.spark.mllib.tree.DecisionTree
 object Main {
   def main(args: Array[String]) {
 
+
     val conf = new SparkConf()
     conf.setMaster("local")
     conf.set("spark.default.parallelism", "1")
