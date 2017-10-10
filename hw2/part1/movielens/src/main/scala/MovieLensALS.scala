@@ -1,10 +1,6 @@
-import org.apache.parquet.hadoop.codec.NonBlockedDecompressorStream
 
-import scala.io.Source
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
-import org.apache.spark.SparkContext._
-import org.apache.spark.rdd._
 import org.apache.spark.mllib.recommendation.{ALS, MatrixFactorizationModel, Rating}
 
 object MovieLensALS {
@@ -19,18 +15,19 @@ object MovieLensALS {
     val ratingData = movieLensDir + "ratings.csv"
     val movieData = movieLensDir + "movies.csv"
 
-    val ratings = sc.textFile(ratingData).map { line =>
+    val ratings = sc.textFile(ratingData).map ({ line =>
       val fields = line.split(",")
       (fields(3).toLong, Rating(fields(0).toInt, fields(1).toInt, fields(2).toDouble))
-    }
+    })
 
-    val movies = sc.textFile(movieData).map { line =>
-      val fields = line.split(",")
-      (fields(0).toInt, fields(1))
-    }.collect().toMap
-
+    val movies = sc.textFile(movieData)
+    movies.take(10).foreach(println)
+    var movieMap: Map[Int, String] = Map()
+    movies.map(line => line.split(",")).collect.foreach(x => {
+      movieMap += (x(0).toInt -> x(1))
+    })
     //sc.stop()
-
+    println(movieMap.size)
     val numRatings = ratings.count
     val numUsers = ratings.map(_._2.user).distinct.count
     val numMovies = ratings.map(_._2.product).distinct.count
@@ -58,15 +55,24 @@ object MovieLensALS {
     var bestRank = 0
     var bestLam*/
     val ranks = 8
-    val lambdas = 10.0
+    val lambdas = 0.2
     val numIters = 15
     val model = ALS.train(training.values, ranks, numIters, lambdas)
-
-    println(model.predict(1, 1))
-
-
+    //val testUsers = test.take(10).map(a => a._2.user)
+    //print (testUsers.toString())
 
 
+    //val prediction = model.recommendProductsForUsers(1)
+
+    model.recommendProducts(2, 10).map(movie => (movieMap(movie.product),movie.rating)).foreach(println)
+    val user2 = sc.textFile(ratingData).map(line => line.split(",")).map(line => (line(0), movieMap(line(1).toInt))).filter(_._1.equals("2"))
+      .reduceByKey(_ .concat("\n").concat( _))
+
+    user2.foreach(println)
+    //prediction.collect().foreach(println)
+
+
+    
 
 
   }
