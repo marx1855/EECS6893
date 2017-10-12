@@ -95,11 +95,10 @@ object Dima {
     val maxBins = 200
 
 
-
     //Desicion Tree Model
     val dtmodel = DecisionTree.trainClassifier(trainingData, numClasses, categoricalFeaturesInfo, impurity, maxDepth, maxBins)
 
-    println(dtmodel.toDebugString)
+    //println(dtmodel.toDebugString)
 
     val labelAndPreds = testData.map { point =>
       val prediction = dtmodel.predict(point.features)
