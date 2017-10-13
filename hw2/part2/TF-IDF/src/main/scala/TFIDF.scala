@@ -1,6 +1,6 @@
 import org.apache.spark.ml.feature.{HashingTF, IDF, Tokenizer, VectorIndexer}
 import org.apache.spark.ml.Pipeline
-import org.apache.spark.ml.classification.{DecisionTreeClassifier, DecisionTreeClassificationModel}
+import org.apache.spark.ml.classification.{DecisionTreeClassifier, RandomForestClassifier}
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
 import org.apache.spark.ml.clustering.KMeans
 import org.apache.spark.sql.SparkSession
@@ -22,7 +22,7 @@ object TFIDF {
     //spark.setLogLevel("WARN")
 
 
-    val textData = spark.read.textFile("hdfs://localhost:9000/part2/modified_text.txt").toDF("Content")
+    val textData = spark.read.textFile("hdfs://localhost:9000/modified_text.txt").toDF("Content")
     val split_ = textData.randomSplit(Array(0.01, 0.99))
     val tokenizer = new Tokenizer()
       .setInputCol("Content")
@@ -71,24 +71,27 @@ object TFIDF {
 
 
 
-    val predictions = dtmodel.transform(trainning)
-    predictions.show(10)
+    val predictions = dtmodel.transform(test)
+    println("accu=")
 
-    /*
-    res.select("prediction").distinct().rdd.foreach(
-      println(_)
-    )*/
+    println(predictions.filter(line => line.get(1) != line.get(4).toString().toDouble.toInt).count())
 
-    //res.select("Content", "prediction").rdd.groupBy(row => row.get(1)).take(10).foreach(println)
-
-    /*res.select("prediction").distinct().rdd.foreach( x =>
-      res.select("Content", "prediction").rdd.filter(line => line.get(1).equals(x.get(0))).take(20).foreach(println)
-    )*/
+    println(predictions.count())
 
 
-    // Shows the result.
+    val rf = new RandomForestClassifier()
+      .setLabelCol("label").setFeaturesCol("features").setMaxBins(100).setMaxDepth(10).setNumTrees(5)
 
-    //model.clusterCenters.take(1).foreach(println)
+    val pipeline2 = new Pipeline()
+      .setStages(Array(rf))
+    val rfmodel = pipeline2.fit(trainning)
+
+
+
+    val predictions2 = rfmodel.transform(test)
+    println(predictions2.count())
+    println(predictions2.filter(line => line.get(1) != line.get(4).toString().toDouble.toInt).count())
+
 
 
   }
